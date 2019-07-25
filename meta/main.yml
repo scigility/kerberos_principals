@@ -1,0 +1,28 @@
+galaxy_info:
+  author: Laurent Hoss
+  description: Deploy kerberos principals and keytabs
+  company: Scigility Switzerland AG
+  license: Apache Version 2.0
+  min_ansible_version: 2.5
+  platforms:
+    - name: EL
+      versions:
+      - all
+    - name: Fedora
+      versions:
+      - all
+    - name: MacOSX
+      versions:
+      - all
+    - name: Ubuntu
+      versions:
+      - all
+    - name: Debian
+      versions:
+      - all
+  galaxy_tags:
+    - kerberos
+    - principal
+    - keytab
+
+dependencies: []

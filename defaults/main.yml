@@ -1,0 +1,40 @@
+---
+# The (path to the) kadmin.local command
+kerberos_principal_kadmin_cmd: kadmin.local
+
+# The default directory for the created keytabs (referenced only in the `kerberos_principal_keytab` default value)
+kerberos_principal_keytab_dir: /etc/security/keytabs
+
+kerberos_principal_keytab: "{{ kerberos_principal_keytab_dir }}/{{ kerberos_principal_primary }}.user.keytab"
+
+# The principal's 'instance' part. By default it is set to the host's fqdn, but it can be set empty
+kerberos_principal_instance: "{{ ansible_fqdn }}"
+
+# The principal's primary part. By default set to the current user (but usually set to the principal's username)
+kerberos_principal_primary: "{{ ansible_user }}"
+
+# The kerberos realm:
+kerberos_principal_realm: MYREALM.LOCAL
+
+# Flag if enabled lists all the principals after the deployment
+kerberos_principal_listprincs: False
+
+# The principals to create, configured as a list of (principal) dicts
+# by default set to a list with 1 element to create a principal for the current user
+kerberos_principal_principals: 
+  - username: "{{ ansible_user }}"
+
+## Optional Example configs for `kerberos_principal_principals`
+## Example principals config to create a host principal in default keytab
+_kerberos_principals_host:
+  - username: "host"
+    keytab: "/etc/krb5.keytab"
+    keytab_owner: root
+
+## Example Config for testing and showing the additional optional fields in a principal dict
+_kerberos_principals_testusers: 
+ - username: "testuser1"
+ - username: "testuser2"
+   keytab:  "~/my.keytab"
+   primary: "testuser2"
+   instance: "{{ ansible_fqdn }}"

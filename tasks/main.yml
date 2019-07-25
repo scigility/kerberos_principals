@@ -1,0 +1,32 @@
+---
+- debug:
+    msg:
+      - "kadmin_cmd={{kerberos_principal_kadmin_cmd}}"
+      - "kerberos_principal_realm={{kerberos_principal_realm}}"
+      - "kerberos_principal_instance={{kerberos_principal_instance}}"
+      - "kerberos_principal_keytab={{kerberos_principal_keytab}}"
+      - "kerberos_principal_principals={{kerberos_principal_principals}}"
+    verbosity: 2
+
+- name: deploy kerberos principals and related keytabs
+  include_tasks: principal-and-keytab.yml
+  vars:
+    kerberos_principal_primary: "{{ p.username }}"
+    _primary: "{{ p.username  }}"
+    _instance: "{{ p.instance | default(kerberos_principal_instance) }}"
+    _keytab: "{{ p.keytab | default(kerberos_principal_keytab) }}"
+    _keytab_owner: "{{ p.keytab_owner | default(p.username) }}"
+    _realm_name: "{{ p.realm | default(kerberos_principal_realm) }}"
+    _kadmin_cmd: "{{ kerberos_principal_kadmin_cmd }}"
+  loop:  "{{ kerberos_principal_principals }}"
+  loop_control:
+    loop_var: p
+  tags: principals
+
+- name: List Principals on Kerberos
+  shell: '{{ kerberos_principal_kadmin_cmd }} -r {{ kerberos_principal_realm }} -q listprincs'
+  become: True
+  when: kerberos_principal_listprincs | default(False)
+  changed_when: False
+  check_mode: no
+  tags: listprincs
