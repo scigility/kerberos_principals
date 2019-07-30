@@ -3,15 +3,13 @@
 ## Include parameters:
 ## - "_kadmin_cmd": the kadmin cmd (usually 'kadmin.local')
 ## - "_realm_name": the kerberos realm name
-## - "_principal": the principal without the realm OR alternatively you can provide
-## - "_primary": (alternative) the principal's primary
+## - "_primary": the principal's primary
 ## - "_instance": (optional) the principal's instance
 ## - "_keytab" (optional): the keytab file to create
 ## - "_keytab_owner" (optional): the keytab file's owner
 
 - set_fact:
     _principal: "{{ _primary + (('/'+_instance) if _instance is defined  else '') }}"
-  when: _principal is not defined
 
 - name: Create kerberos principal {{ _principal }}
   command: >
